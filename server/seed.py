@@ -7,16 +7,18 @@ from faker import Faker
 
 
 from app import app
-from models import db, Recipe, User
+from models import db, Recipe, User, Message
 
 
 with app.app_context():
     # Create tables if they do not exist
     db.create_all()
 
+
     print("Deleting all records...")
     Recipe.query.delete()
     User.query.delete()
+    Message.query.delete()
 
     fake = Faker()
 
@@ -55,7 +57,21 @@ with app.app_context():
         recipe.user = rc(users)
         recipes.append(recipe)
 
+
     db.session.add_all(recipes)
-    
+
+    print("Creating messages...")
+    messages = []
+    for i in range(30):
+        body = fake.sentence()
+        username = rc(usernames)
+        message = Message(
+            body=body,
+            username=username
+        )
+        messages.append(message)
+
+    db.session.add_all(messages)
+
     db.session.commit()
     print("Complete.")

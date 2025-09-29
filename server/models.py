@@ -36,6 +36,7 @@ class User(db.Model, SerializerMixin):
             raise ValueError('Username must be present')
         return username
 
+
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
 
@@ -50,3 +51,14 @@ class Recipe(db.Model, SerializerMixin):
         if not instructions or len(instructions) < 50:
             raise ValueError('Instructions must be present and at least 50 characters long')
         return instructions
+
+# Add Message model for LMS compatibility
+from datetime import datetime
+
+class Message(db.Model, SerializerMixin):
+    __tablename__ = 'messages'
+
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String, nullable=False)
+    username = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

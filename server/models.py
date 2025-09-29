@@ -3,7 +3,13 @@ from sqlalchemy.orm import validates
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 
+
 from config import db, bcrypt
+
+# Ensure tables are created for LMS and local testing
+from config import app
+with app.app_context():
+    db.create_all()
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
